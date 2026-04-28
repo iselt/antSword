@@ -35,6 +35,20 @@
 
 参见文档 [快速入门][url-quickstart]
 
+## SonneZ 维护版说明
+
+此私有维护版本对 AntSword 的运行依赖进行了更新，并改为直接通过 Electron
+启动和打包，不再需要外部 AntSword loader。
+
+- `npm install`：根据 `package-lock.json` 安装依赖。
+- `npm start`：使用本地 Electron 运行 AntSword。
+- `npm run dist`：通过 electron-builder 构建桌面端安装包/压缩包。
+- `npm run release`：在 `GH_TOKEN` 具备私有仓库写权限时，向
+  `SonneZ/antSword` 发布 Windows、Linux、macOS 的 x64 与 arm64 release 资产。
+
+仓库内置 GitHub Actions 工作流，推送 `v*` 标签后会自动构建 Windows、Linux、
+macOS 的 x64 与 arm64 可执行 release 产物。
+
 ## 如何贡献
 
 参见文档 [支持蚁剑][url-contribute]

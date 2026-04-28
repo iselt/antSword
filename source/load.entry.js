@@ -14,9 +14,15 @@ const {
   remote
 } = require('electron');
 
+const sourcePath = path.join(remote.process.env.AS_WORKDIR, 'source');
 Module
   .globalPaths
-  .push(path.join(remote.process.env.AS_WORKDIR, 'source'));
+  .push(sourcePath);
+process.env.NODE_PATH = [
+  sourcePath,
+  process.env.NODE_PATH
+].filter(Boolean).join(path.delimiter);
+Module._initPaths();
 
 // 开始加载时间
 let APP_START_TIME = +new Date;

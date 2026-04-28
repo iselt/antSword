@@ -95,19 +95,26 @@ class PlugStore {
               return
             };
             // 解压安装插件
-            UNZIP(savePath, {
-              dir: CONF.plugPath
-            }, (err) => {
-              webContents.send('store-download-progress', {
-                type: 'installed',
-                file: fileName
+            UNZIP(savePath, { dir: CONF.plugPath })
+              .then(() => {
+                webContents.send('store-download-progress', {
+                  type: 'installed',
+                  file: fileName
+                });
+                logger.info('Installed', fileName);
+                // 重新加载插件列表
+                mainWindow
+                  .webContents
+                  .send('reloadPlug', true);
+              })
+              .catch((err) => {
+                webContents.send('store-download-progress', {
+                  type: 'install-error',
+                  file: fileName,
+                  err: err.message || err
+                });
+                logger.fatal('Install plugin failed', err);
               });
-              logger.info('Installed', fileName);
-              // 重新加载插件列表
-              mainWindow
-                .webContents
-                .send('reloadPlug', true);
-            });
           });
         }
       });

@@ -10,6 +10,25 @@ const iconv = require('iconv-lite');
 const NodeRSA = require('node-rsa');
 const fs = require('fs');
 
+function normalizeBuffer(data) {
+  if (Buffer.isBuffer(data)) {
+    return data;
+  }
+  if (data instanceof ArrayBuffer) {
+    return Buffer.from(data);
+  }
+  if (ArrayBuffer.isView(data)) {
+    return Buffer.from(data.buffer, data.byteOffset, data.byteLength);
+  }
+  if (data && data.type === 'Buffer' && Array.isArray(data.data)) {
+    return Buffer.from(data.data);
+  }
+  if (data === undefined || data === null) {
+    return Buffer.alloc(0);
+  }
+  return Buffer.from(data);
+}
+
 class Base {
   /**
    * 是否支持 Raw Body
@@ -331,27 +350,36 @@ class Base {
       antSword['ipcRenderer']
         // 请求完毕返回数据{text,buff}
         .once(`request-${hash}`, (event, ret) => {
-          let buff = this.__decoder__[this.__opts__['decoder'] || 'default'].decode_buff(ret['buff'], ext);
-          let encoding = antSword
-            .Decodes
-            .detectEncoding(buff, {
-              defaultEncoding: "unknown"
+          try {
+            let buff = normalizeBuffer(ret['buff']);
+            buff = normalizeBuffer(this.__decoder__[this.__opts__['decoder'] || 'default'].decode_buff(buff, ext));
+            let encoding = antSword
+              .Decodes
+              .detectEncoding(buff, {
+                defaultEncoding: "unknown"
+              });
+            encoding = encoding != "unknown" ?
+              encoding :
+              this.__opts__['encode'];
+            let text = antSword.Decodes.decode(buff, encoding);
+            return res({
+              'encoding': encoding || "",
+              'text': antSword.noxss(text, false),
+              'buff': Buffer.from(antSword.noxss(buff.toString(), false))
             });
-          encoding = encoding != "unknown" ?
-            encoding :
-            this.__opts__['encode'];
-          let text = antSword.Decodes.decode(buff, encoding);
-          return res({
-            'encoding': encoding || "",
-            'text': antSword.noxss(text, false),
-            'buff': Buffer.from(antSword.noxss(buff.toString(), false))
-          });
+          } catch (err) {
+            return rej(err);
+          }
         })
         // HTTP请求返回字节流
         .on(`request-chunk-${hash}`, (event, ret) => {
-          return chunkCallBack ?
-            chunkCallBack(this.__decoder__[this.__opts__['decoder'] || 'default'].decode_buff(ret)) :
-            null;
+          try {
+            return chunkCallBack ?
+              chunkCallBack(this.__decoder__[this.__opts__['decoder'] || 'default'].decode_buff(normalizeBuffer(ret))) :
+              null;
+          } catch (err) {
+            return rej(err);
+          }
         })
         // 数据请求错误
         .once(`request-error-${hash}`, (event, ret) => {

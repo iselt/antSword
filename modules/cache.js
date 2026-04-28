@@ -9,7 +9,7 @@
 const fs = require('fs'),
   path = require('path'),
   CONF = require('./config'),
-  Datastore = require('nedb');
+  Datastore = require('@seald-io/nedb');
 
 var logger;
 

@@ -37,6 +37,20 @@ This software, of which the development thought is modularization, is intended t
 
 See document: [Quick Start][url-quickstart]
 
+## SonneZ build notes
+
+This private maintenance build refreshes AntSword dependencies and runs directly
+with Electron. The external AntSword loader is no longer required.
+
+- `npm install`: install dependencies from `package-lock.json`.
+- `npm start`: run AntSword through the local Electron runtime.
+- `npm run dist`: build desktop packages with electron-builder.
+- `npm run release`: publish Windows, Linux, and macOS release assets for x64 and
+  arm64 when `GH_TOKEN` can write to the private `SonneZ/antSword` repository.
+
+The bundled GitHub Actions workflow builds tagged releases for Windows, Linux,
+and macOS on both x64 and arm64.
+
 ## Contribute
 
 See document: [Make contributions to AntSword][url-contribute]

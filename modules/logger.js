@@ -24,10 +24,29 @@ class Logger {
     let tm = new Date()
       .toTimeString()
       .split(' ')[0];
-    let log = typeof logs === 'object' ?
-      JSON.stringify(logs) :
-      String(logs);
+    let args = Array.from(logs);
+    let log = args
+      .map((_) => {
+        if (_ instanceof Error) {
+          return _.stack || _.message;
+        }
+        return typeof _ === 'object' ? JSON.stringify(_) : String(_);
+      })
+      .join(' ');
     return `[${tm}] ${type.toUpperCase()}::${this.tag}\t${log}`;
+  }
+
+  serialize(logs) {
+    return Array.from(logs).map((_) => {
+      if (_ instanceof Error) {
+        return {
+          name: _.name,
+          message: _.message,
+          stack: _.stack
+        };
+      }
+      return _;
+    });
   }
 
   /**
@@ -37,7 +56,7 @@ class Logger {
   debug() {
     mainWindow.send('logger-debug', [
       this.parseLog('debug', arguments),
-      arguments
+      this.serialize(arguments)
     ]);
   }
 
@@ -48,7 +67,7 @@ class Logger {
   info() {
     mainWindow.send('logger-info', [
       this.parseLog('info', arguments),
-      arguments
+      this.serialize(arguments)
     ]);
   }
 
@@ -59,7 +78,7 @@ class Logger {
   warn() {
     mainWindow.send('logger-warn', [
       this.parseLog('warn', arguments),
-      arguments
+      this.serialize(arguments)
     ]);
   }
 
@@ -70,7 +89,7 @@ class Logger {
   fatal() {
     mainWindow.send('logger-fatal', [
       this.parseLog('fatal', arguments),
-      arguments
+      this.serialize(arguments)
     ]);
   }
 }

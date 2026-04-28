@@ -9,7 +9,7 @@ const fs = require('fs'),
   dns = require('dns'),
   path = require('path'),
   CONF = require('./config'),
-  Datastore = require('nedb'),
+  Datastore = require('@seald-io/nedb'),
   qqwry = require("geoips").info(path.join(__dirname, '../static/libs/qqwry.dat'));
 
 var logger;

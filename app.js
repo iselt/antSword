@@ -8,6 +8,7 @@
 
 const path = require('path');
 const electron = require('electron');
+const remoteMain = require('@electron/remote/main');
 const {
   app,
   shell,
@@ -15,9 +16,28 @@ const {
   BrowserWindow
 } = require('electron');
 
-// 注册为标准 scheme, 默认情况下web storage apis (localStorage, sessionStorage, webSQL,
-// indexedDB, cookies) 被禁止访问非标准schemes
-protocol.registerStandardSchemes(['ant-views', 'ant-static', 'ant-src']);
+process.env.AS_WORKDIR = process.env.AS_WORKDIR || __dirname;
+
+remoteMain.initialize();
+app.on('web-contents-created', (_event, webContents) => {
+  remoteMain.enable(webContents);
+});
+
+// 注册为标准 scheme, 默认情况下 web storage apis (localStorage, sessionStorage,
+// webSQL, indexedDB, cookies) 被禁止访问非标准 schemes
+protocol.registerSchemesAsPrivileged([
+  'ant-views',
+  'ant-static',
+  'ant-src'
+].map((scheme) => ({
+  scheme,
+  privileges: {
+    standard: true,
+    secure: true,
+    supportFetchAPI: true,
+    corsEnabled: true
+  }
+})));
 
 app.once('ready', () => {
   /**
@@ -56,10 +76,14 @@ app.once('ready', () => {
       webgl: false,
       javascript: true,
       nodeIntegration: true, // 开启 nodejs 支持
-      // contextIsolation: false, // 关闭上下文隔离 webSecurity: false,
-      // allowRunningInsecureContent: true, sandbox: false,
+      contextIsolation: false,
+      sandbox: false,
+      webSecurity: false,
+      allowRunningInsecureContent: true,
+      preload: path.join(__dirname, 'source/preload.js')
     }
   });
+  remoteMain.enable(mainWindow.webContents);
 
   // 加载views
   mainWindow.loadURL('ant-views://front/index.html');
@@ -90,10 +114,17 @@ app.once('ready', () => {
     .on('enter-full-screen', reloadUI)
     .on('leave-full-screen', reloadUI);
 
-  mainWindow.webContents.on('new-window', (event, url) => {
-    event.preventDefault();
-    shell.openExternal(url);
-  });
+  if (mainWindow.webContents.setWindowOpenHandler) {
+    mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+      shell.openExternal(url);
+      return { action: 'deny' };
+    });
+  } else {
+    mainWindow.webContents.on('new-window', (event, url) => {
+      event.preventDefault();
+      shell.openExternal(url);
+    });
+  }
   // 打开调试控制台 mainWindow.webContents.openDevTools();
 
   electron.Logger = require('./modules/logger')(mainWindow);

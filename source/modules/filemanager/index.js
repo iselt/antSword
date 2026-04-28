@@ -13,7 +13,8 @@ const ENCODES = require('../../base/encodes');
 const fs = require('fs');
 const iconv = require('iconv-lite');
 const crypto = require('crypto');
-const mime = require("mime");
+const mimeModule = require("mime");
+const mime = mimeModule.default || mimeModule;
 const PATH = require("path");
 const dialog = antSword.remote.dialog;
 

@@ -11,14 +11,14 @@ const fs = require('fs'),
   through = require('through'),
   CONF = require('./config'),
   superagent = require('superagent'),
-  superagentProxy = require('superagent-proxy'),
   ws = require('ws');
 const { Readable } = require("stream");
-const ProxyAgent = require('proxy-agent');
+const proxyAgent = require('proxy-agent');
+const ProxyAgent = proxyAgent.ProxyAgent || proxyAgent;
 let wsclients = {};
 let logger;
 // 请求UA
-const USER_AGENT = require('random-fake-useragent');
+const USER_AGENT = require('./userAgent');
 const { unescape } = require('querystring');
 
 // 请求超时
@@ -51,7 +51,10 @@ class Request {
     ipcMain.on('aproxytest', this.onAproxyTest.bind(this));
     ipcMain.on('request', this.onRequest.bind(this));
     ipcMain.on('download', this.onDownlaod.bind(this));
-    superagentProxy(superagent);
+  }
+
+  applyProxy(request, uri) {
+    return uri ? request.agent(new ProxyAgent(uri)) : request;
   }
 
   /**
@@ -95,7 +98,7 @@ class Request {
     superagent
       .get(opts['url'])
       .set('User-Agent', USER_AGENT.getRandom())
-      .proxy(opts['aproxyuri'])
+      .agent(new ProxyAgent(opts['aproxyuri']))
       .timeout(REQ_TIMEOUT)
       .end((err, ret) => {
         if (err) {
@@ -216,9 +219,9 @@ class Request {
     }
     // ws
     if (opts['useWebSocket'] == 1) {
-      let wsopts = {
-        agent: new ProxyAgent(APROXY_CONF['uri']),
-      }
+      let wsopts = APROXY_CONF['uri'] ? {
+        agent: new ProxyAgent(APROXY_CONF['uri'])
+      } : {};
       let sock = new ws(opts['url'], wsopts);
       sock.on("open", function() {
         let _tmp = encodeURIComponent(opts.data[opts['pwd']]).replace(/asunescape\((.+?)\)/g, function($, $1) {
@@ -262,8 +265,7 @@ class Request {
     let _request = superagent.post(opts['url']);
     self.buildHeaders(_request, opts);
     let _datasuccess = false; // 表示是否是 404 类shell
-    _request = _request
-      .proxy(APROXY_CONF['uri'])
+    _request = self.applyProxy(_request, APROXY_CONF['uri'])
       .type(self.reqContentType)
       // .set('Content-Type', 'application/x-www-form-urlencoded')
       .timeout(opts.timeout || REQ_TIMEOUT)
@@ -289,7 +291,7 @@ class Request {
           self.parse(opts['tag_s'], opts['tag_e'], (chunk) => {
             event.sender.send('request-chunk-' + opts['hash'], chunk);
           }, res, (err, ret) => {
-            let buff = ret ? ret : Buffer.from();
+            let buff = toBuffer(ret);
             // 自动猜测编码
             let encoding = detectEncoding(buff, {
               defaultEncoding: "unknown"
@@ -344,7 +346,7 @@ class Request {
             // 请求失败 TIMEOUT
             return event.sender.send('request-error-' + opts['hash'], err);
           }
-          let buff = ret.hasOwnProperty('body') ? ret.body : Buffer.from();
+          let buff = responseToBuffer(ret);
           // 解码
           let text = "";
           // 自动猜测编码
@@ -388,9 +390,9 @@ class Request {
 
     // ws
     if (opts['useWebSocket'] == 1) {
-      let wsopts = {
-        agent: new ProxyAgent(APROXY_CONF['uri']),
-      }
+      let wsopts = APROXY_CONF['uri'] ? {
+        agent: new ProxyAgent(APROXY_CONF['uri'])
+      } : {};
       let sock = new ws(opts['url'], wsopts);
       sock.on("open", function() {
         let _tmp = encodeURIComponent(opts.data[opts['pwd']]).replace(/asunescape\((.+?)\)/g, function($, $1) {
@@ -422,8 +424,7 @@ class Request {
     // 设置headers
     self.buildHeaders(_request, opts);
     let _datasuccess = false; // 表示是否是 404 类shell
-    _request = _request
-      .proxy(APROXY_CONF['uri'])
+    _request = self.applyProxy(_request, APROXY_CONF['uri'])
       .type(self.reqContentType)
       .ignoreHTTPS(opts['ignoreHTTPS'])
       // 自定义body
@@ -581,6 +582,38 @@ class Request {
     });
   }
 
+}
+
+function toBuffer(data) {
+  if (Buffer.isBuffer(data)) {
+    return data;
+  }
+  if (data === undefined || data === null) {
+    return Buffer.alloc(0);
+  }
+  if (isPlainObject(data)) {
+    return Buffer.alloc(0);
+  }
+  return Buffer.from(data);
+}
+
+function responseToBuffer(ret) {
+  if (!ret) {
+    return Buffer.alloc(0);
+  }
+  let body = ret.body;
+  if (body !== undefined && body !== null && !isPlainObject(body)) {
+    return toBuffer(body);
+  }
+  return toBuffer(ret.text);
+}
+
+function isPlainObject(data) {
+  return typeof data === 'object' &&
+    !Buffer.isBuffer(data) &&
+    !Array.isArray(data) &&
+    !(data instanceof ArrayBuffer) &&
+    !ArrayBuffer.isView(data);
 }
 
 /**

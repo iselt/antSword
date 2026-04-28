@@ -569,7 +569,8 @@ ipcRenderer
     form_body
       .cells('a')
       .hideHeader();
-    const marked = require('marked');
+    const markedModule = require('marked');
+    const marked = markedModule.marked || markedModule;
     let _html = `<html>
     <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
