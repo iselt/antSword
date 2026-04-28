@@ -16,7 +16,7 @@ const {
   BrowserWindow
 } = require('electron');
 
-process.env.AS_WORKDIR = process.env.AS_WORKDIR || path.join(app.getPath('home'), '.antsword');
+process.env.AS_WORKDIR = process.env.AS_WORKDIR || __dirname;
 
 remoteMain.initialize();
 app.on('web-contents-created', (_event, webContents) => {
@@ -40,6 +40,8 @@ protocol.registerSchemesAsPrivileged([
 })));
 
 app.once('ready', () => {
+  process.env.AS_DATA_PATH = process.env.AS_DATA_PATH || path.join(app.getPath('home'), '.antsword', 'antData');
+
   /**
    * 注册静态资源protocol
    * - 可通过注册的协议访问资源文件，如ant-static://libs/jquery.jquery.js

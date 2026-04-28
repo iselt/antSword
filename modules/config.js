@@ -17,7 +17,7 @@ class Conf {
     // 旧数据存储目录
     let _oldPath = path.join(process.env.HOME || process.env.LOCALAPPPATH || process.cwd() || '.', '.antSword', 'shell.db');
     // 数据存储目录
-    this.basePath = path.join(process.env.AS_WORKDIR, 'antData')
+    this.basePath = process.env.AS_DATA_PATH || path.join(process.env.AS_WORKDIR, 'antData')
       // 初始化目录
       !fs.existsSync(this.basePath) ?
       fs.mkdirSync(this.basePath, {

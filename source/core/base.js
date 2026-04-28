@@ -101,7 +101,7 @@ class Base {
   rsaEncrypt() {
     let key = new NodeRSA();
     try {
-      let priKey = fs.readFileSync(path.join(remote.process.env.AS_WORKDIR, `antData/key_rsa`));
+      let priKey = fs.readFileSync(path.join(remote.process.env.AS_DATA_PATH, `key_rsa`));
       if (priKey.length > 0) {
         key.importKey(priKey.toString(), 'private');
       }

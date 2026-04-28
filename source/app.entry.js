@@ -219,18 +219,24 @@ antSword['encoders'] = (function() {
     encoders_path[antSword['core_types'][i]] = [];
   }
 
-  let userencoder_path = path.join(remote.process.env.AS_WORKDIR, 'antData/encoders');
+  let userencoder_path = path.join(remote.process.env.AS_DATA_PATH, 'encoders');
   // 初始化
   !fs.existsSync(userencoder_path) ?
-    fs.mkdirSync(userencoder_path) :
+    fs.mkdirSync(userencoder_path, {
+      recursive: true
+    }) :
     null;
   antSword['core_types'].map((t) => {
     !fs.existsSync(path.join(userencoder_path, `${t}`)) ?
-      fs.mkdirSync(path.join(userencoder_path, `${t}`)) :
+      fs.mkdirSync(path.join(userencoder_path, `${t}`), {
+        recursive: true
+      }) :
       null;
     let t_path = path.join(userencoder_path, `${t}/encoder/`);
     !fs.existsSync(t_path) ?
-      fs.mkdirSync(t_path) :
+      fs.mkdirSync(t_path, {
+        recursive: true
+      }) :
       null;
 
     let es = fs.readdirSync(t_path);
@@ -267,18 +273,24 @@ antSword['decoders'] = (function() {
     decoders_path[antSword['core_types'][i]] = [];
   }
 
-  let userdecoder_path = path.join(remote.process.env.AS_WORKDIR, 'antData/encoders');
+  let userdecoder_path = path.join(remote.process.env.AS_DATA_PATH, 'encoders');
   // 初始化
   !fs.existsSync(userdecoder_path) ?
-    fs.mkdirSync(userdecoder_path) :
+    fs.mkdirSync(userdecoder_path, {
+      recursive: true
+    }) :
     null;
   antSword['core_types'].map((t) => {
     !fs.existsSync(path.join(userdecoder_path, `${t}`)) ?
-      fs.mkdirSync(path.join(userdecoder_path, `${t}`)) :
+      fs.mkdirSync(path.join(userdecoder_path, `${t}`), {
+        recursive: true
+      }) :
       null;
     let t_path = path.join(userdecoder_path, `${t}/decoder/`);
     !fs.existsSync(t_path) ?
-      fs.mkdirSync(t_path) :
+      fs.mkdirSync(t_path, {
+        recursive: true
+      }) :
       null;
 
     let es = fs.readdirSync(t_path);

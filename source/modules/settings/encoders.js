@@ -21,7 +21,7 @@ class Encoders {
     this.encoders = antSword["encoders"];
     this.decoders = antSword["decoders"];
 
-    let keyPath = path.join(remote.process.env.AS_WORKDIR, `antData/`);
+    let keyPath = remote.process.env.AS_DATA_PATH;
     this.rsa = {
       keyPath: {
         pub: `${keyPath}/key_rsa.pub`,
@@ -180,7 +180,7 @@ class Encoders {
               toastr.error(LANG['message']['ename_duplicate'], LANG_T['error']);
               return;
             }
-            fs.renameSync(oepath, path.join(remote.process.env.AS_WORKDIR, `antData/encoders/${oetype}/${oedtype}/${nValue}.js`));
+            fs.renameSync(oepath, path.join(remote.process.env.AS_DATA_PATH, `encoders/${oetype}/${oedtype}/${nValue}.js`));
             toastr.success(LANG['message']["rename_success"], LANG_T["success"]);
             break
           case 2:
@@ -197,7 +197,7 @@ class Encoders {
             //   toastr.error("Not Support", LANG_T["error"]);
             //   return;
             // }
-            fs.renameSync(oepath, path.join(remote.process.env.AS_WORKDIR, `antData/encoders/${nValue}/${oedtype}/${oename}.js`));
+            fs.renameSync(oepath, path.join(remote.process.env.AS_DATA_PATH, `encoders/${nValue}/${oedtype}/${oename}.js`));
             toastr.success(LANG['message']["retype_success"], LANG_T["success"]);
             break
         }
@@ -237,7 +237,7 @@ class Encoders {
         layer.close(i);
         return
       }
-      let savePath = path.join(remote.process.env.AS_WORKDIR, `antData/encoders/${type}/${edtype}/${value}${rsa}.js`);
+      let savePath = path.join(remote.process.env.AS_DATA_PATH, `encoders/${type}/${edtype}/${value}${rsa}.js`);
 
       let filedata = '';
       if (edtype === 'encoder') {
@@ -672,7 +672,7 @@ module.exports = {
             data.push({
               id: _id,
               ename: _,
-              epath: path.join(remote.process.env.AS_WORKDIR, `antData/encoders/${t}/encoder/${_}`),
+              epath: path.join(remote.process.env.AS_DATA_PATH, `encoders/${t}/encoder/${_}`),
               etype: t, // shell Type
               edtype: 'encoder',
               data: [
@@ -694,7 +694,7 @@ module.exports = {
             data.push({
               id: _id,
               ename: _,
-              epath: path.join(remote.process.env.AS_WORKDIR, `antData/encoders/${t}/decoder/${_}`),
+              epath: path.join(remote.process.env.AS_DATA_PATH, `encoders/${t}/decoder/${_}`),
               etype: t, // shell Type
               edtype: 'decoder',
               data: [
@@ -726,18 +726,24 @@ module.exports = {
         encoders[antSword['core_types'][i]] = [];
         encoders_path[antSword['core_types'][i]] = [];
       }
-      let userencoder_path = path.join(remote.process.env.AS_WORKDIR, 'antData/encoders');
+      let userencoder_path = path.join(remote.process.env.AS_DATA_PATH, 'encoders');
       // 初始化
       !fs.existsSync(userencoder_path) ?
-        fs.mkdirSync(userencoder_path) :
+        fs.mkdirSync(userencoder_path, {
+          recursive: true
+        }) :
         null;
         antSword['core_types'].map((t) => {
         !fs.existsSync(path.join(userencoder_path, `${t}`)) ?
-          fs.mkdirSync(path.join(userencoder_path, `${t}`)) :
+          fs.mkdirSync(path.join(userencoder_path, `${t}`), {
+            recursive: true
+          }) :
           null;
         let t_path = path.join(userencoder_path, `${t}/encoder/`);
         !fs.existsSync(t_path) ?
-          fs.mkdirSync(t_path) :
+          fs.mkdirSync(t_path, {
+            recursive: true
+          }) :
           null;
 
         let es = fs.readdirSync(t_path);
@@ -767,18 +773,24 @@ module.exports = {
         decoders[antSword['core_types'][i]] = [];
         decoders_path[antSword['core_types'][i]] = [];
       }
-      let userdecoder_path = path.join(remote.process.env.AS_WORKDIR, 'antData/encoders');
+      let userdecoder_path = path.join(remote.process.env.AS_DATA_PATH, 'encoders');
       // 初始化
       !fs.existsSync(userdecoder_path) ?
-        fs.mkdirSync(userdecoder_path) :
+        fs.mkdirSync(userdecoder_path, {
+          recursive: true
+        }) :
         null;
         antSword['core_types'].map((t) => {
         !fs.existsSync(path.join(userdecoder_path, `${t}`)) ?
-          fs.mkdirSync(path.join(userdecoder_path, `${t}`)) :
+          fs.mkdirSync(path.join(userdecoder_path, `${t}`), {
+            recursive: true
+          }) :
           null;
         let t_path = path.join(userdecoder_path, `${t}/decoder/`);
         !fs.existsSync(t_path) ?
-          fs.mkdirSync(t_path) :
+          fs.mkdirSync(t_path, {
+            recursive: true
+          }) :
           null;
 
         let es = fs.readdirSync(t_path);
