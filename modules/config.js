@@ -20,7 +20,9 @@ class Conf {
     this.basePath = path.join(process.env.AS_WORKDIR, 'antData')
       // 初始化目录
       !fs.existsSync(this.basePath) ?
-      fs.mkdirSync(this.basePath) :
+      fs.mkdirSync(this.basePath, {
+        recursive: true
+      }) :
       null;
     // 旧数据搬迁
     if (fs.existsSync(_oldPath) && !fs.existsSync(this.dataPath)) {
@@ -48,7 +50,9 @@ class Conf {
     let _ = path.join(this.basePath, '/cache/');
     // 创建缓存目录
     !fs.existsSync(_) ?
-      fs.mkdirSync(_) :
+      fs.mkdirSync(_, {
+        recursive: true
+      }) :
       null;
     return _;
   }
@@ -61,7 +65,9 @@ class Conf {
   get plugPath() {
     let _ = path.join(this.basePath, '/plugins/');
     !fs.existsSync(_) ?
-      fs.mkdirSync(_) :
+      fs.mkdirSync(_, {
+        recursive: true
+      }) :
       null;
     return _;
   }
@@ -74,7 +80,9 @@ class Conf {
   get tmpPath() {
     let _ = path.join(this.basePath, '/.temp/');
     !fs.existsSync(_) ?
-      fs.mkdirSync(_) :
+      fs.mkdirSync(_, {
+        recursive: true
+      }) :
       null;
     return _;
   }

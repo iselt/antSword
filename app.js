@@ -16,7 +16,7 @@ const {
   BrowserWindow
 } = require('electron');
 
-process.env.AS_WORKDIR = process.env.AS_WORKDIR || __dirname;
+process.env.AS_WORKDIR = process.env.AS_WORKDIR || path.join(app.getPath('home'), '.antsword');
 
 remoteMain.initialize();
 app.on('web-contents-created', (_event, webContents) => {
