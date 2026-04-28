@@ -26,7 +26,7 @@ class Language {
     }]);
 
     // 表单
-    const _language = antSword['storage']('language', false, 'en');
+    const _language = antSword['storage']('language', false, 'zh');
     const form = cell.attachForm([{
       type: 'settings',
       position: 'label-left',

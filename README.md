@@ -1,30 +1,28 @@
-# AntSword [![release](https://img.shields.io/badge/release-v2.1.16-blue.svg?style=flat-square)][url-release]
+# 中国蚁剑 [![release](https://img.shields.io/badge/release-v2.1.16-blue.svg?style=flat-square)][url-release]
 
-> AntSword in your hands, no worries in your mind！
+> 一剑在手，纵横无忧！
 
-**AntSword is an open source, cross-platform website administration tool, being designed to meet the needs of penetration testers together with security researchers with permissions and/or authorizations as well as webmasters.**
+**中国蚁剑是一款开源的跨平台网站管理工具，它主要面向于合法授权的渗透测试安全人员以及进行常规操作的网站管理员。**<br>
+**任何人不得将其用于非法用途以及盈利等目的，否则后果自行承担并将追究其相关责任！**
 
-**Anyone shall not use it for illegal purposes and profitability. Besides that, publishing unauthorized modified version is also prohibited, or otherwise bear legal responsibilities.**
+[English][url-docen] / [文档][url-document] / [更新日志][url-changelog]
 
-This software, of which the development thought is modularization, is intended to provide easy-to-understand codes and modification guidelines for users of different levels. Therefore, any contribution making by everyone to this project is encouraged, whether large or small. By doing so, this tool can be more convenient and consequently become your most powerful kit！
+## 开发栈
+ - [Electron][url-electron]
+ - [ES6][url-es6]
+ - [dhtmlx][url-dhtmlx]
+ - [Nodejs][url-nodejs]
+ * 以及其他在项目中调用到的库
 
-[中文说明][url-doczh] / [Document][url-document] / [Changelog][url-changelog]
+中国蚁剑推崇模块化的开发思想，遵循**开源，就要开得漂亮**的原则，致力于为不同层次的人群提供最简单易懂、方便直接的代码展示及其修改说明，努力让大家可以一起为这个项目贡献出力所能及的点滴，让这款工具真正能让大家用得顺心、舒适，让它能为大家施展出最人性化最适合你的能力！
 
-## Development stack
-
-- [Electron][url-electron]
-- [ES6][url-es6]
-- [dhtmlx][url-dhtmlx]
-- [Nodejs][url-nodejs]
-* And other libraries called in the project.
-
-## Screenshots
+## 软件截图
 
 ![][url-mainui]
 
 <details>
 
-<summary>More Screenshots</summary>
+<summary>更多截图</summary>
 
 ![][url-filemanager]
 ![][url-terminal]
@@ -33,45 +31,47 @@ This software, of which the development thought is modularization, is intended t
 
 </details>
 
-## Quick Start
+## 快速入门
 
-See document: [Quick Start][url-quickstart]
+参见文档 [快速入门][url-quickstart]
 
-## SonneZ build notes
+## SonneZ 维护版说明
 
-This private maintenance build refreshes AntSword dependencies and runs directly
-with Electron. The external AntSword loader is no longer required.
+此私有维护版本对 AntSword 的运行依赖进行了更新，并改为直接通过 Electron
+启动和打包，不再需要外部 AntSword loader。
 
-- `npm install`: install dependencies from `package-lock.json`.
-- `npm start`: run AntSword through the local Electron runtime.
-- `npm run dist`: build desktop packages with electron-builder.
-- `npm run release`: publish Windows, Linux, and macOS release assets for x64 and
-  arm64 when `GH_TOKEN` can write to the private `SonneZ/antSword` repository.
+- `npm install`：根据 `package-lock.json` 安装依赖。
+- `npm start`：使用本地 Electron 运行 AntSword。
+- `npm run dist`：通过 electron-builder 构建桌面端安装包/压缩包。
+- `npm run release`：在 `GH_TOKEN` 具备私有仓库写权限时，向
+  `SonneZ/antSword` 发布 Windows、Linux、macOS 的 x64 与 arm64 release 资产。
 
-The bundled GitHub Actions workflow builds tagged releases for Windows, Linux,
-and macOS on both x64 and arm64.
+仓库内置 GitHub Actions 工作流，推送 `v*` 标签后会自动构建 Windows、Linux、
+macOS 的 x64 与 arm64 可执行 release 产物。
 
-## Contribute
+## 如何贡献
 
-See document: [Make contributions to AntSword][url-contribute]
+参见文档 [支持蚁剑][url-contribute]
 
-## Thanks
+## 致敬感谢
+> 中国蚁剑的核心代码模板均改自伟大的**中国菜刀**，在此向作者感谢以及致敬！致敬每一位为网络安全做出点滴贡献的新老前辈！
 
-> Thanks to anyone who made any contributions.
+**一路走来，得到了很多朋友的参与开发以及点滴赞助，在此感谢陪伴，感谢你们能让它越走越远！**
 
-## Other
+## 其它
 
-### 404StarLink 2.0 - Galaxy
+### 星链计划2.0
 
 ![](https://github.com/knownsec/404StarLink-Project/raw/master/logo.png)
 
-antSword has joined 404Team [404StarLink 2.0 - Galaxy](https://github.com/knownsec/404StarLink2.0-Galaxy)
+antSword 已经加入 404Team [404StarLink 2.0 - Galaxy](https://github.com/knownsec/404StarLink2.0-Galaxy)
 
-## LICENSE
+## 开源协议
 
-[LICENSE](./LICENSE)
+详情请查看 [LICENSE](./LICENSE)
 
-[url-doczh]: README_CN.md
+
+[url-docen]: README_EN.md
 [url-changelog]: CHANGELOG.md
 [url-document]: https://www.yuque.com/antswordproject/antsword/
 [url-release]: https://github.com/AntSwordProject/AntSword/releases/
@@ -82,7 +82,7 @@ antSword has joined 404Team [404StarLink 2.0 - Galaxy](https://github.com/knowns
 [url-homepage]: http://uyu.us
 [url-release]: https://github.com/AntSwordProject/AntSword/releases
 [url-quickstart]: https://www.yuque.com/antswordproject/antsword/lmwppk
-[url-contribute]: https://doc.u0u.us/en/contribute_docs.html
+[url-contribute]: https://doc.u0u.us/zh-hans/contribute_docs.html
 [url-mainui]: https://cdn.nlark.com/yuque/0/2021/png/1592179/1611820109032-b563426e-015c-4afe-a905-70e878fdcdb6.png
 [url-filemanager]: https://cdn.nlark.com/yuque/0/2021/png/1592179/1611823243564-26e964c2-6d38-421a-8543-5f1f082a6bbd.png
 [url-terminal]: https://cdn.nlark.com/yuque/0/2021/png/1592179/1611823538382-50fba630-3bd9-4205-b5dd-9cc054da79a8.png

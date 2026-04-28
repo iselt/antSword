@@ -4,19 +4,19 @@
 'use strict';
 
 const languages = {
-  'en': 'English',
   'zh': '简体中文',
+  'en': 'English',
   'zh_hk': '繁體中文(香港)',
   'zh_tw': '繁體中文(台灣)'
 }
 
-// 获取本地设置语言（如若没有，则获取浏览器语言
-let lang = antSword['storage']('language', false, navigator.language.substr(0, 2));
+// 获取本地设置语言；未设置时默认使用简体中文
+let lang = antSword['storage']('language', false, 'zh');
 
 // 判断本地设置语言是否符合语言模板
 lang = languages[lang] ?
   lang :
-  'en';
+  'zh';
 
 // 返回语言模板
 let langModule = require(`./${lang}`);
