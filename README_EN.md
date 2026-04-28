@@ -48,6 +48,11 @@ with Electron. The external AntSword loader is no longer required.
 - `npm run release`: publish Windows, Linux, and macOS release assets for x64 and
   arm64 when `GH_TOKEN` can write to the private `SonneZ/antSword` repository.
 
+The default user data directory is `~/.antsword/antData`. It stores runtime data
+such as the database, cache, plugins, and custom encoders. Application resources
+are still loaded from the installation directory, so user data is not written
+into the packaged `.app` or `app.asar`.
+
 The bundled GitHub Actions workflow builds tagged releases for Windows, Linux,
 and macOS on both x64 and arm64.
 

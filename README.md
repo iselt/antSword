@@ -46,6 +46,8 @@
 - `npm run release`：在 `GH_TOKEN` 具备私有仓库写权限时，向
   `SonneZ/antSword` 发布 Windows、Linux、macOS 的 x64 与 arm64 release 资产。
 
+默认用户数据存储路径为 `~/.antsword/antData`，其中包含数据库、缓存、插件和自定义编码器等运行数据。应用程序资源仍从安装目录读取，数据目录不会写入打包后的 `.app`/`app.asar`。
+
 仓库内置 GitHub Actions 工作流，推送 `v*` 标签后会自动构建 Windows、Linux、
 macOS 的 x64 与 arm64 可执行 release 产物。
 
