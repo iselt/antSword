@@ -87,7 +87,9 @@ env -u ELECTRON_RUN_AS_NODE npm start
 - 也可以通过 `workflow_dispatch` 手动触发。
 - 构建矩阵包含 macOS、Windows、Linux 的 x64 与 arm64。
 - 工作流使用 Node.js 22 和 `npm ci`。
-- `electron-builder` 通过 `GH_TOKEN` 发布资产。
+- CI 只构建不上传：`electron-builder --publish never` 生成产物，再用 `gh release upload` 上传到同名草稿 Release。
+- 产物中不得出现仓库所有者等个人标识：`scripts/remove-update-meta.js`（afterPack 钩子）会删除 electron-builder 自动生成的 `app-update.yml`；发布前应抽查产物确认。
+- 草稿 Release 确认无误后用 `gh release edit <tag> --draft=false` 正式发布。
 
 发布规则：
 
@@ -111,6 +113,7 @@ git push origin master
 git tag -a v2.1.16-maint.N -m "Release v2.1.16-maint.N"
 git push origin v2.1.16-maint.N
 gh run list --workflow "Build release" --limit 5
+gh release edit v2.1.16-maint.N --draft=false
 ```
 
 ## GitHub Actions 修改规范
