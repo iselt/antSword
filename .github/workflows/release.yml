@@ -52,8 +52,9 @@ jobs:
       - name: Build artifact
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # 发布目标由 Actions 表达式在 runner 层替换（bash 与 pwsh 通用），
-        # package.json 与产物中均不包含仓库所有者信息
+        # 用 bash 统一三个平台：pwsh 会把 -c.key=value 拆成多个参数。
+        # 发布目标由 Actions 表达式替换，package.json 与产物中均不含所有者信息
+        shell: bash
         run: >
           npx electron-builder --${{ matrix.platform }} --${{ matrix.arch }} --publish onTagOrDraft
           -c.publish.provider=github
