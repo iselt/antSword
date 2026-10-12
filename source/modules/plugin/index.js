@@ -33,8 +33,22 @@ class Plugin {
       minWidth: 650,
       minHeight: 555,
       show: false,
-      title: 'AntSword.Store'
+      title: 'AntSword.Store',
+      webPreferences: {
+        // 远程商店页面依赖旧版渲染环境，通过 source/storePreload.js 提供
+        // window.require 兼容层，避免开启完整 nodeIntegration
+        preload: path.join(antSword['remote'].app.getAppPath(), 'source', 'storePreload.js'),
+        contextIsolation: false,
+        sandbox: false,
+        nodeIntegration: false
+      }
     });
+    // 远程商店 loader.js 以区分大小写的正则 /antsword\/[\d\.]+/ 校验
+    // navigator.userAgent，必须包含小写 antsword/版本；webPreferences.userAgent
+    // 经 @electron/remote 传入不可靠，这里创建后用 setUserAgent 方法显式设置
+    win
+      .webContents
+      .setUserAgent(`${navigator.userAgent} antsword/${antSword['package']['version']}`);
     win.on('close', () => {
       this.win = win = null;
     });
@@ -43,14 +57,16 @@ class Plugin {
     if (antSword.aproxymode != "noproxy") {
       proxyuri = antSword.aproxyuri;
     }
-    ses.setProxy({
-      proxyRules: proxyuri
-    }, () => {
-      win.loadURL(url);
-      win.show();
-      // win.openDevTools();
-      this.win = win;
-    });
+    // 注意：session 经由 @electron/remote 代理，回调式 API 的函数参数
+    // 无法跨进程序列化，必须使用 Promise 形式，否则 show() 永远不会执行
+    ses
+      .setProxy({ proxyRules: proxyuri })
+      .then(() => {
+        win.loadURL(url);
+        win.show();
+        // win.openDevTools();
+        this.win = win;
+      });
   }
 
 }

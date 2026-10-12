@@ -38,6 +38,12 @@ class Menubar {
    * @return {[type]}       [description]
    */
   reload(event, LANG) {
+    // 菜单点击回调会被 Electron 以 click(menuItem, window, event) 形式调用，
+    // 直接把 webContents.send bind 进回调会让多余参数进入 IPC 序列化并抛出
+    // Failed to serialize arguments，因此必须丢弃回调参数只发送固定命令
+    const sendMenubar = (cmd) => () => event
+      .sender
+      .send('menubar', cmd);
     // 菜单模板
     const template = [{
       // 主菜单
@@ -45,67 +51,43 @@ class Menubar {
       submenu: [{
         label: LANG['main']['about'],
         accelerator: 'Shift+CmdOrCtrl+I',
-        click: event
-          .sender
-          .send
-          .bind(event.sender, 'menubar', 'settings-about')
+        click: sendMenubar('settings-about')
       }, {
         label: LANG['main']['language'],
         accelerator: 'Shift+CmdOrCtrl+L',
-        click: event
-          .sender
-          .send
-          .bind(event.sender, 'menubar', 'settings-language')
+        click: sendMenubar('settings-language')
       }, {
         label: LANG['main']['aproxy'],
         accelerator: 'Shift+CmdOrCtrl+A',
-        click: event
-          .sender
-          .send
-          .bind(event.sender, 'menubar', 'settings-aproxy')
+        click: sendMenubar('settings-aproxy')
       }, {
         label: LANG['main']['display'],
         accelerator: 'Shift+CmdOrCtrl+D',
-        click: event
-          .sender
-          .send
-          .bind(event.sender, 'menubar', 'settings-display')
+        click: sendMenubar('settings-display')
       }, {
         type: 'separator'
       }, {
         label: LANG['main']['encoders'],
         accelerator: 'Shift+CmdOrCtrl+E',
-        click: event
-          .sender
-          .send
-          .bind(event.sender, 'menubar', 'settings-encoders')
+        click: sendMenubar('settings-encoders')
       }, {
         type: 'separator'
       }, {
         label: LANG['main']['settings'],
         accelerator: 'Shift+CmdOrCtrl+S',
-        click: event
-          .sender
-          .send
-          .bind(event.sender, 'menubar', 'settings')
+        click: sendMenubar('settings')
       }, {
         type: 'separator'
       }, {
         label: LANG['main']['pluginStore'],
         accelerator: 'Shift+CmdOrCtrl+P',
-        click: event
-          .sender
-          .send
-          .bind(event.sender, 'menubar', 'plugin-store')
+        click: sendMenubar('plugin-store')
       }, {
         type: 'separator'
       }, {
         label: LANG['main']['update'],
         accelerator: 'Shift+CmdOrCtrl+U',
-        click: event
-          .sender
-          .send
-          .bind(event.sender, 'menubar', 'check-update')
+        click: sendMenubar('check-update')
       }, {
         type: 'separator'
       }, {
@@ -146,10 +128,7 @@ class Menubar {
       }, {
         label: LANG['edit']['search'],
         accelerator: 'Shift+CmdOrCtrl+F',
-        click: event
-          .sender
-          .send
-          .bind(event.sender, 'menubar', 'shellmanager-search')
+        click: sendMenubar('shellmanager-search')
       }, {
         type: 'separator'
       }, {
@@ -163,26 +142,17 @@ class Menubar {
       submenu: [{
         label: LANG['window']['next'],
         accelerator: 'Shift+CmdOrCtrl+Right',
-        click: event
-          .sender
-          .send
-          .bind(event.sender, 'menubar', 'tabbar-next')
+        click: sendMenubar('tabbar-next')
       }, {
         label: LANG['window']['prev'],
         accelerator: 'Shift+CmdOrCtrl+Left',
-        click: event
-          .sender
-          .send
-          .bind(event.sender, 'menubar', 'tabbar-prev')
+        click: sendMenubar('tabbar-prev')
       }, {
         type: 'separator'
       }, {
         label: LANG['window']['close'],
         accelerator: 'Shift+CmdOrCtrl+W',
-        click: event
-          .sender
-          .send
-          .bind(event.sender, 'menubar', 'tabbar-close')
+        click: sendMenubar('tabbar-close')
       }]
     }, {
       // 调试
@@ -255,10 +225,7 @@ class Menubar {
       }
     }, {
       label: LANG['tray']['settings'],
-      click: event
-        .sender
-        .send
-        .bind(event.sender, 'menubar', 'settings')
+      click: sendMenubar('settings')
     }, {
       label: LANG['debug']['restart'],
       click: () => {
@@ -273,10 +240,7 @@ class Menubar {
       }
     }, {
       label: LANG['tray']['about'],
-      click: event
-        .sender
-        .send
-        .bind(event.sender, 'menubar', 'settings-about')
+      click: sendMenubar('settings-about')
     }, {
       type: 'separator'
     }, {

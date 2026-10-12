@@ -231,13 +231,14 @@ class ViewSite {
     if (this.useproxy && antSword.aproxymode != "noproxy") {
       proxyuri = antSword.aproxyuri;
     }
-    ses.setProxy({
-      proxyRules: proxyuri
-    }, () => {
-      win.loadURL(url);
-      win.show();
-      win.openDevTools();
-    });
+    // session 经由 @electron/remote 代理，回调式 API 的函数参数无法跨进程
+    // 序列化，必须使用 Promise 形式，否则 show() 永远不会执行
+    ses
+      .setProxy({ proxyRules: proxyuri })
+      .then(() => {
+        win.loadURL(url);
+        win.show();
+      });
   }
 }
 
