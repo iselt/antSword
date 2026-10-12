@@ -29,7 +29,7 @@
     "dist:mac": "electron-builder --mac --x64 --arm64",
     "dist:win": "electron-builder --win --x64 --arm64",
     "dist:linux": "electron-builder --linux --x64 --arm64",
-    "release": "electron-builder --mac --win --linux --x64 --arm64 --publish always"
+    "release": "electron-builder --mac --win --linux --x64 --arm64 --publish never"
   },
   "devDependencies": {
     "electron": "^41.3.0",
@@ -39,10 +39,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/iselt/antSword"
+    "url": "https://github.com/AntSwordProject/antSword"
   },
   "build": {
-    "appId": "org.sonnez.antsword",
+    "appId": "org.antsword.app",
     "productName": "AntSword",
     "copyright": "Copyright © AntSword contributors",
     "asar": true,
@@ -76,13 +76,6 @@
         "tar.gz"
       ],
       "category": "Development"
-    },
-    "publish": {
-      "provider": "github",
-      "owner": "iselt",
-      "repo": "antSword",
-      "private": true,
-      "releaseType": "release"
     }
   },
   "update": {
@@ -93,7 +86,7 @@
     }
   },
   "bugs": {
-    "url": "https://github.com/iselt/antSword/issues"
+    "url": "https://github.com/AntSwordProject/antSword/issues"
   },
-  "homepage": "https://github.com/iselt/antSword/"
+  "homepage": "https://github.com/AntSwordProject/antSword/"
 }

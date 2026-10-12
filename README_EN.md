@@ -37,7 +37,7 @@ This software, of which the development thought is modularization, is intended t
 
 See document: [Quick Start][url-quickstart]
 
-## iselt build notes
+## Maintenance build notes
 
 This private maintenance build refreshes AntSword dependencies and runs directly
 with Electron. The external AntSword loader is no longer required.
@@ -45,8 +45,9 @@ with Electron. The external AntSword loader is no longer required.
 - `npm install`: install dependencies from `package-lock.json`.
 - `npm start`: run AntSword through the local Electron runtime.
 - `npm run dist`: build desktop packages with electron-builder.
-- `npm run release`: publish Windows, Linux, and macOS release assets for x64 and
-  arm64 when `GH_TOKEN` can write to the private `iselt/antSword` repository.
+- `npm run release`: build x64 and arm64 artifacts for all platforms locally
+  without publishing; tagged releases are published automatically by GitHub
+  Actions.
 
 The default user data directory is `~/.antsword/antData`. It stores runtime data
 such as the database, cache, plugins, and custom encoders. Application resources

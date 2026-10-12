@@ -35,7 +35,7 @@
 
 参见文档 [快速入门][url-quickstart]
 
-## iselt 维护版说明
+## 维护版说明
 
 此私有维护版本对 AntSword 的运行依赖进行了更新，并改为直接通过 Electron
 启动和打包，不再需要外部 AntSword loader。
@@ -43,8 +43,8 @@
 - `npm install`：根据 `package-lock.json` 安装依赖。
 - `npm start`：使用本地 Electron 运行 AntSword。
 - `npm run dist`：通过 electron-builder 构建桌面端安装包/压缩包。
-- `npm run release`：在 `GH_TOKEN` 具备私有仓库写权限时，向
-  `iselt/antSword` 发布 Windows、Linux、macOS 的 x64 与 arm64 release 资产。
+- `npm run release`：本地构建全部平台的 x64 与 arm64 产物（不发布）；
+  正式发布由 GitHub Actions 在推送 `v*` 标签后自动完成。
 
 默认用户数据存储路径为 `~/.antsword/antData`，其中包含数据库、缓存、插件和自定义编码器等运行数据。应用程序资源仍从安装目录读取，数据目录不会写入打包后的 `.app`/`app.asar`。
 
