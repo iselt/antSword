@@ -39,7 +39,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/SonneZ/antSword"
+    "url": "https://github.com/iselt/antSword"
   },
   "build": {
     "appId": "org.sonnez.antsword",
@@ -79,7 +79,7 @@
     },
     "publish": {
       "provider": "github",
-      "owner": "SonneZ",
+      "owner": "iselt",
       "repo": "antSword",
       "private": true,
       "releaseType": "release"
@@ -93,7 +93,7 @@
     }
   },
   "bugs": {
-    "url": "https://github.com/SonneZ/antSword/issues"
+    "url": "https://github.com/iselt/antSword/issues"
   },
-  "homepage": "https://github.com/SonneZ/antSword/"
+  "homepage": "https://github.com/iselt/antSword/"
 }

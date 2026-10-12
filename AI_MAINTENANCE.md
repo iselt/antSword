@@ -93,9 +93,9 @@ env -u ELECTRON_RUN_AS_NODE npm start
 
 - 未经明确要求，不修改 `package.json` 中的版本号。
 - 如果需要在相同应用版本下重复发布维护构建，使用递增维护 tag，例如：
-  - `v2.1.16-sonnez.1`
-  - `v2.1.16-sonnez.2`
-  - `v2.1.16-sonnez.3`
+  - `v2.1.16-iselt.1`
+  - `v2.1.16-iselt.2`
+  - `v2.1.16-iselt.3`
 - 不要强制移动已发布 tag，除非维护者明确选择这种方式并理解影响。
 - 发布前确认当前提交已推送到目标远端分支。
 - 发布后用 `gh run list` 或 GitHub Actions 页面确认 workflow 状态。
@@ -106,11 +106,11 @@ env -u ELECTRON_RUN_AS_NODE npm start
 ```bash
 git status --short --branch
 git log --oneline --decorate -6
-git tag --list "v2.1.16-sonnez*"
-git push sonnez master
-git tag -a v2.1.16-sonnez.N -m "Release v2.1.16-sonnez.N"
-git push sonnez v2.1.16-sonnez.N
-gh run list --repo SonneZ/antSword --workflow "Build release" --limit 5
+git tag --list "v2.1.16-iselt*"
+git push origin master
+git tag -a v2.1.16-iselt.N -m "Release v2.1.16-iselt.N"
+git push origin v2.1.16-iselt.N
+gh run list --repo iselt/antSword --workflow "Build release" --limit 5
 ```
 
 ## GitHub Actions 修改规范

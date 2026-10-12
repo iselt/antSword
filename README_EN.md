@@ -37,7 +37,7 @@ This software, of which the development thought is modularization, is intended t
 
 See document: [Quick Start][url-quickstart]
 
-## SonneZ build notes
+## iselt build notes
 
 This private maintenance build refreshes AntSword dependencies and runs directly
 with Electron. The external AntSword loader is no longer required.
@@ -46,7 +46,7 @@ with Electron. The external AntSword loader is no longer required.
 - `npm start`: run AntSword through the local Electron runtime.
 - `npm run dist`: build desktop packages with electron-builder.
 - `npm run release`: publish Windows, Linux, and macOS release assets for x64 and
-  arm64 when `GH_TOKEN` can write to the private `SonneZ/antSword` repository.
+  arm64 when `GH_TOKEN` can write to the private `iselt/antSword` repository.
 
 The default user data directory is `~/.antsword/antData`. It stores runtime data
 such as the database, cache, plugins, and custom encoders. Application resources
