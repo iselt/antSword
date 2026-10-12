@@ -76,7 +76,8 @@
         "tar.gz"
       ],
       "category": "Development"
-    }
+    },
+    "afterPack": "./scripts/remove-update-meta.js"
   },
   "update": {
     "md5": "",

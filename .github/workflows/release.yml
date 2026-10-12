@@ -52,11 +52,25 @@ jobs:
       - name: Build artifact
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # 用 bash 统一三个平台：pwsh 会把 -c.key=value 拆成多个参数。
-        # 发布目标由 Actions 表达式替换，package.json 与产物中均不含所有者信息
+        # 只构建不发布：publish 配置会在产物内生成含仓库所有者信息的
+        # app-update.yml，上传改由 gh 完成（且使用 bash，pwsh 会拆分
+        # -c.key=value 参数）
         shell: bash
-        run: >
-          npx electron-builder --${{ matrix.platform }} --${{ matrix.arch }} --publish onTagOrDraft
-          -c.publish.provider=github
-          -c.publish.owner=${{ github.repository_owner }}
-          -c.publish.repo=${{ github.event.repository.name }}
+        run: npx electron-builder --${{ matrix.platform }} --${{ matrix.arch }} --publish never
+
+      - name: Upload artifacts to draft release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          for i in 1 2 3 4 5; do
+            gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 && break
+            gh release create --draft --verify-tag --title "$TAG" \
+              --repo "$GITHUB_REPOSITORY" "$TAG" \
+              --notes "维护版构建。macOS/Windows/Linux 的 x64 与 arm64 产物见附件。" \
+              && break
+            sleep 15
+          done
+          find release -maxdepth 1 -type f -print0 \
+            | xargs -0 gh release upload "$TAG" --repo "$GITHUB_REPOSITORY" --clobber
